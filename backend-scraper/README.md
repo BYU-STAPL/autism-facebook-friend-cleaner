@@ -23,7 +23,7 @@ At this point your terminal should indicate you are using a virtual environment,
 - Run `pip install -r requirements.txt`
 - If necessary update pip and setuptools by `pip install --upgrade pip` and `pip install --upgrade setuptools`
 
-## 5. Run server
+## 5. Launch server
 This step will be determined after a webserver framework has been decided
 
 # Todo list

@@ -33,8 +33,10 @@ Run the following:
 
 # Todo list
 - Automatically gather number of mutual friends for each friend straight from the webpage
+- Detect if each friend has set a profile picture or not
 - Fix the way the scraper script runs - currently it runs once when a user navigates to the Facebook friends page so it doesn't ever even see friends rows that don't load until you scroll down
 - Create a dropdown for filtering with the options: show all, show possibly real, show possibly fake
+  - This can be first done using just information the extension is reading, and then once the server is created it can contribute additional information
 - Make a call to backend scraper for additional information on friends and apply the information returned to the friends web page
 
 # Finished items
