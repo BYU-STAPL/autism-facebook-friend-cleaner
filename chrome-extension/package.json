@@ -1,7 +1,7 @@
 {
   "name": "infinity-cleaner",
   "version": "1.0.0",
-  "description": "",
+  "description": "This web extension consists of a Node.js project with Typescript source files.",
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack/webpack.config.js"
