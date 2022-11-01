@@ -28,6 +28,9 @@ At this point your terminal should indicate you are using a virtual environment,
 - To enable debug `flask --app server --debug run`
 - To run publicly `flask run --host=0.0.0.0`
 
+## 6. Run tests
+- Run `python test_client.py`
+
 # Todo list
 - Add Python related .gitignore file
 - Salvage existing code from YouTube privacy scraper
