@@ -3,6 +3,10 @@ from selenium import webdriver
 
 
 def get_users_info(user_urls):
+
+    # it looks like you need to be logged into facebook to view pages, so we might need to have
+    # somebody's credentials in here
+
     with webdriver.Chrome() as driver:
 
         # driver = webdriver.Chrome()
