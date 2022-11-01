@@ -24,7 +24,9 @@ At this point your terminal should indicate you are using a virtual environment,
 - If necessary update pip and setuptools by `pip install --upgrade pip` and `pip install --upgrade setuptools`
 
 ## 5. Launch server
-This step will be determined after a webserver framework has been decided
+- Run `flask --app server run`
+- To enable debug `flask --app server --debug run`
+- To run publicly `flask run --host=0.0.0.0`
 
 # Todo list
 - Add Python related .gitignore file
