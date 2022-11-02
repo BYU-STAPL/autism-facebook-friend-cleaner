@@ -29,3 +29,10 @@ The participants in this study can consent to giving data from their own Faceboo
 
 ## Friend information that will not be gathered by scraper
 - Sensitive item #1
+
+# Studies about detecting fake accounts
+We will not be able to get as sophisticated as these papers but they are a reference.
+- [https://dl.acm.org/doi/pdf/10.1145/2556609]()
+- [https://www.usenix.org/system/files/conference/soups2014/soups14-paper-rashtian.pdf]()
+- [https://dl.acm.org/doi/pdf/10.1145/3366423.3380204]()
+- [https://www.usenix.org/system/files/conference/soups2014/soups14-paper-rashtian.pdf]()
