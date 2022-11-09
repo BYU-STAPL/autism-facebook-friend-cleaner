@@ -163,6 +163,8 @@ const evaluateXpath = (xpath: string, resultType: number) => {
 }
 
 const getFriendRows = () => {
+    console.log("finding friend rows");
+    // const friendRowsXpath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div/div[position()>3]";
     const friendRowsXpath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div/div[position()>3]";
     return evaluateXpath(friendRowsXpath, XPathResult.UNORDERED_NODE_ITERATOR_TYPE);
 }
@@ -179,8 +181,7 @@ const friendRows = getFriendRows();
 let currentRow = friendRows.iterateNext();
 
 while (currentRow) {
+    console.log("turning something blue");
     turnBlue(currentRow);
     currentRow = friendRows.iterateNext();
 }
-
-
