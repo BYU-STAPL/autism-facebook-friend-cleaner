@@ -63,7 +63,7 @@ def get_user_stats(user, friends_info):
 
         'num_posts': len(posts),
         'avg_num_comments': sum([post['comments'] for post in posts]) / len(posts) if len(posts) > 0 else 0,
-        'avg_num_likes': sum([post['likes'] for post in posts]) / len(posts) if len(posts) > 0 else 0,
+        'avg_num_likes': sum([post['likes'] for post in posts]) / len(posts) if len(posts) > 0 else 0,  # one post has None for likes
         'avg_num_links': sum(len(post['links']) for post in posts) / len(posts) if len(posts) > 0 else 0,
         'avg_num_reactions': sum(post['reaction_count'] for post in posts) / len(posts) if len(posts) > 0 else 0,
         'avg_num_shares': sum(post['shares'] for post in posts) / len(posts) if len(posts) > 0 else 0
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     )
 
     friends_info = {}
-    tp = threadpool.ThreadPool([threadpool.Task(get_user_stats, (str(friend['id']), friends_info)) for friend in profile_info['Friends']], announce=True)
+    tp = threadpool.ThreadPool([threadpool.Task(get_user_stats, (str(friend['id']), friends_info)) for friend in profile_info['Friends']], num_threads=1, announce=True)
     tp.start()
     tp.join()
 
