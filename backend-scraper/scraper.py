@@ -1,9 +1,7 @@
-import pickle
 from facebook_scraper import get_posts, get_profile
-import threadpool
 
 
-def get_user_info(user):
+def get_user(user):
     info = {
         'profile': get_profile(
             user,
@@ -18,7 +16,8 @@ def get_user_info(user):
                 'allow_extra_requests': False,
                 'posts_per_page': 200
             }
-        )
+        ),
+        'stats': get_user_stats(user)
     }
     info['posts'] = [post for post in info['posts']]
     return info
@@ -35,7 +34,7 @@ def get_truthy_val(item, key):
     return bool(item[key]) if key in item else False
 
 
-def get_user_stats(user, friends_info):
+def get_user_stats(user):
     try:
         profile = get_profile(user, cookies='facebook.com_cookies.txt')
     except:
@@ -52,7 +51,7 @@ def get_user_stats(user, friends_info):
     )
     posts = [post for post in posts]
 
-    stats = {
+    return {
         'has_about': get_truthy_val(profile, 'About'),
         'has_basic_info': get_truthy_val(profile, 'Basic Info'),
         'has_contact_info': get_truthy_val(profile, 'Contact info'),
@@ -73,33 +72,20 @@ def get_user_stats(user, friends_info):
         'has_cover_photo_text': get_truthy_val(profile, 'cover_photo_text'),
 
         'num_posts': len(posts),
-        'avg_num_comments': get_avg(posts, lambda x: len(x['comments'])),
+        'avg_num_comments': get_avg(posts, lambda x: x['comments']),
         'avg_num_likes': get_avg(posts, lambda x: x['likes']),
         'avg_num_links': get_avg(posts, lambda x: len(x['links'])),
         'avg_num_reactions': get_avg(posts, lambda x: x['reaction_count']),
         'avg_num_shares': get_avg(posts, lambda x: x['shares'])
     }
 
-    friends_info[user] = {
-        'profile': profile,
-        'posts': posts,
-        'stats': stats
-    }
-
 
 if __name__ == '__main__':
 
-    user = 'josh.bedwell.14'
-    profile_info = get_profile(
-        user,
-        friends=True,
-        cookies='facebook.com_cookies.txt'
-    )
+    user = 'ameilya.monson'
 
-    friends_info = {}
-    tp = threadpool.ThreadPool([threadpool.Task(get_user_stats, (str(friend['id']), friends_info)) for friend in profile_info['Friends']], num_threads=1, announce=True)
-    tp.start()
-    tp.join()
+    user_info = get_user(user)
+    print(user_info)
 
-    with open('friends_info.pickle', 'w') as f:
-        pickle.dump(friends_info, f)
+    user_stats = get_user_stats(user)
+    print(user_stats)

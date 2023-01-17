@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from scraper import get_users_info
+from scraper import get_user
 
 app = Flask(__name__)
 
@@ -12,5 +12,5 @@ def index():
 @app.route('/user_info')
 def get_user_info():
     content = request.json
-    response = get_users_info(content)
+    response = [get_user(user) for user in content['users']]
     return jsonify(response)
