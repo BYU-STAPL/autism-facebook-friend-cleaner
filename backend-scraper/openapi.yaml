@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: STaPL FB profile analyzer
+  description: STaPL FB profile analyzer
+  version: 1.0.0
+servers:
+  - url: 'https://test.com'
+paths:
+  /user_info:
+    get:
+      summary: Submit urls of Facebook profiles to analyze
+      requestBody:
+        description: List of urls to Facebook profile pages
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInfoRequest"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfoResponse"
+        '400':
+          description: client error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+
+components:
+  schemas:
+
+    UserInfoRequest:
+      type: object
+      properties:
+        user_urls:
+          type: array
+          items:
+            description: A url to someone's public Facebook page, ex. https://www.facebook.com/josh.bedwell.14
+            type: string
+
+    UserInfoResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserInfo"
+
+    UserInfo:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        full_name:
+          type: string
+        num_mutual_friends:
+          type: number
+        has_default_profile_picture:
+          type: boolean
+
+    Error:
+      type: object
+      properties:
+        title:
+          type: string
+        status:
+          type: number
+        detail:
+          type: number

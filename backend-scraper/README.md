@@ -22,9 +22,17 @@ At this point your terminal should indicate you are using a virtual environment,
 ## 4. Install required dependencies
 - Run `pip install -r requirements.txt`
 - If necessary update pip and setuptools by `pip install --upgrade pip` and `pip install --upgrade setuptools`
+- You will need a webdriver for selenium to use. There are different webdrivers for various browsers. [Chromium](https://chromedriver.chromium.org/getting-started) is the most recommended because it is the most standard.
+- You will also need to have the browser of the webdriver you install
+- [https://lxml.de/installation.html]()
 
 ## 5. Launch server
-This step will be determined after a webserver framework has been decided
+- Run `flask --app server run`
+- To enable debug `flask --app server --debug run`
+- To run publicly `flask run --host=0.0.0.0`
+
+## 6. Run tests
+- Run `python test_client.py`
 
 # Todo list
 - Add Python related .gitignore file
