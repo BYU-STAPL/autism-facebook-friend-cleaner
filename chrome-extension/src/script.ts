@@ -172,14 +172,21 @@ const getFriendRows = () => {
 const turnBlue = (node: Node) => {
     if (node instanceof HTMLElement) {
         let e = node as HTMLElement;
-        e.style.backgroundColor = "blue";
+        e.style.backgroundColor = "#ADD8E6";
     }
 }
+
+console.log("actually doing anything");
+
+// may need to somehow get just the part that lists the friends and use that instead of the document body
+window.scrollTo(0, document.body.scrollHeight);
 
 const friendRows = getFriendRows();
 
 let currentRow = friendRows.iterateNext();
 
+// turns things blue if you load directly from the friends page, if you are on facebook and then go to friends it doesn't work
+// you have to refresh once on the friends page to do anything
 while (currentRow) {
     console.log("turning something blue");
     turnBlue(currentRow);
