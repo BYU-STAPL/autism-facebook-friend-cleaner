@@ -156,6 +156,30 @@ Something to note is I think the garbled 7 character class names aren't a reliab
 
  */
 
+const s = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div";
+
+const sidebar = document.evaluate(s, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+console.log("got sidebar");
+
+let elements;
+const interval = setInterval(() => {
+    // @ts-ignore
+    elements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
+    if (elements.length > 0) {
+        let lastElement = elements[elements.length - 1];
+        lastElement.scrollIntoView();
+    }
+    setTimeout(() => {
+        // @ts-ignore
+        let newElements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
+        if (newElements.length > elements.length) {
+            let lastElement = newElements[newElements.length - 1];
+            lastElement.scrollIntoView();
+        }
+    }, 500);
+}, 1000);
+
+ /* OLD CODE
 // The code below will select the friend rows and turn all of their backgrounds blue
 
 const evaluateXpath = (xpath: string, resultType: number) => {
@@ -185,3 +209,4 @@ while (currentRow) {
     turnBlue(currentRow);
     currentRow = friendRows.iterateNext();
 }
+*/
