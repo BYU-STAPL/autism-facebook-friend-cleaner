@@ -156,31 +156,25 @@ Something to note is I think the garbled 7 character class names aren't a reliab
 
  */
 
-// The code below will select the friend rows and turn all of their backgrounds blue
+const s = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div";
 
-const evaluateXpath = (xpath: string, resultType: number) => {
-    return document.evaluate(xpath, document, null, resultType, null);
-}
+const sidebar = document.evaluate(s, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+console.log("got sidebar");
 
-const getFriendRows = () => {
-    const friendRowsXpath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div/div[position()>3]";
-    return evaluateXpath(friendRowsXpath, XPathResult.UNORDERED_NODE_ITERATOR_TYPE);
-}
-
-const turnBlue = (node: Node) => {
-    if (node instanceof HTMLElement) {
-        let e = node as HTMLElement;
-        e.style.backgroundColor = "blue";
+let elements;
+const interval = setInterval(() => {
+    // @ts-ignore
+    elements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
+    if (elements.length > 0) {
+        let lastElement = elements[elements.length - 1];
+        lastElement.scrollIntoView();
     }
-}
-
-const friendRows = getFriendRows();
-
-let currentRow = friendRows.iterateNext();
-
-while (currentRow) {
-    turnBlue(currentRow);
-    currentRow = friendRows.iterateNext();
-}
-
-
+    setTimeout(() => {
+        // @ts-ignore
+        let newElements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
+        if (newElements.length > elements.length) {
+            let lastElement = newElements[newElements.length - 1];
+            lastElement.scrollIntoView();
+        }
+    }, 500);
+}, 1000);
