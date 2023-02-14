@@ -3,32 +3,34 @@ let userInfo: { [name: string]:object } = {}
 const scrollToBottom = () => {
     const sidebarXPath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div";
 
-    const sidebar = document.evaluate(sidebarXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    const sidebar = document.evaluate(sidebarXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as Element;
+    if (sidebar === null) {
+        console.log("Could not find sidebar");
+        return;
+    }
 
-    let elements;
-    setInterval(() => {
-        // @ts-ignore
-        elements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
-        if (elements.length > 0) {
-            let lastElement = elements[elements.length - 1];
+    let oldLength = 0;
+    const scrollInterval = setInterval(() => {
+        let elements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
+        if (elements.length !== oldLength) {
+            oldLength = elements.length;
+            let lastElement = elements[elements.length - 1] as Element;
             lastElement.scrollIntoView();
-            console.log("I got this element");
+            console.log("Got an element, continuing...");
+        } else {
+            console.log("Got no new elements, stopping...");
+            clearInterval(scrollInterval);
         }
-        setTimeout(() => {
-            // @ts-ignore
-            let newElements = Array.prototype.slice.call(sidebar.querySelectorAll("div"));
-            if (newElements.length > elements.length) {
-                let lastElement = newElements[newElements.length - 1];
-                lastElement.scrollIntoView();
-                console.log("I got this element");
-            }
-        }, 500);
-    }, 1000);
+    }, 500);
 }
 
 const getUserInfo: (userElement: HTMLElement) => [string, number | null] = function (
     userElement: HTMLElement
 ): [string, number | null] {
+    const aTag = userElement.getElementsByTagName("a")[0];
+    if (aTag === undefined) {
+        return ["test", null];
+    }
     const username = userElement.getElementsByTagName("a")[0].href.substring(25);
     const mutualFriendsXPath = "/a/div[1]/div[2]/div[1]/div/div/div[2]/span/div/div/span/div/span";
     const mutualFriendsElement = document.evaluate(mutualFriendsXPath, userElement, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
@@ -86,13 +88,16 @@ const populateUserInfo = async () => {
         usernames.push(username);
     }
 
-    const response = await fetch('https://stapl.cs.byu.edu/fb_user_info', {method: 'POST', body: {"users": usernames}});
-    const data = await response.json();
-    if (response.ok) {
-        // TODO put info from `data` into `userInfo`
-    } else {
-        // TODO handle error
-    }
+    // FIXME error
+    // const response = await fetch('https://stapl.cs.byu.edu/fb_user_info', {method: 'POST', body: JSON.stringify({"users": usernames})});
+    // const data = await response.json();
+    // if (response.ok) {
+    //     // TODO put info from `data` into `userInfo`
+    //     console.log(response.json())
+    // } else {
+    //     // TODO handle error
+    //     console.log("request failed!")
+    // }
 }
 
 const scrollToTop = () => {
