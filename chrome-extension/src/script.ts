@@ -83,17 +83,24 @@ const populateUserInfo = async () => {
         userInfo[username] = {"numMutualFriends": mutualFriends}
     }
 
-    const usernames: string[] = [];
-    for (let username in userInfo) {
-        usernames.push(username);
-    }
+    const usernames: string[] = ["josh.bedwell.14"];
+    // for (let username in userInfo) {
+    //     usernames.push(username);
+    // }
 
     // FIXME error
-    // const response = await fetch('https://stapl.cs.byu.edu/fb_user_info', {method: 'POST', body: JSON.stringify({"users": usernames})});
-    // const data = await response.json();
+
+    console.log("Beginning call for user info...");
+    const response = fetch('https://stapl.cs.byu.edu/fb_user_info/', {method: 'POST', body: JSON.stringify({"users": usernames})});
+    try {
+        const data = (await response).json();
+        console.log("no error");
+    } catch (e) {
+        console.error(e);
+    }
     // if (response.ok) {
     //     // TODO put info from `data` into `userInfo`
-    //     console.log(response.json())
+    //     console.log(data)
     // } else {
     //     // TODO handle error
     //     console.log("request failed!")
