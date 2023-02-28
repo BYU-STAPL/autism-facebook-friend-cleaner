@@ -1,6 +1,6 @@
 let userInfo: { [name: string]:object } = {}
 
-const scrollToBottom = () => {
+const scrollToBottom = (callback: () => void) => {
     const sidebarXPath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div";
 
     const sidebar = document.evaluate(sidebarXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as Element;
@@ -16,10 +16,9 @@ const scrollToBottom = () => {
             oldLength = elements.length;
             let lastElement = elements[elements.length - 1] as Element;
             lastElement.scrollIntoView();
-            console.log("Got an element, continuing...");
         } else {
-            console.log("Got no new elements, stopping...");
             clearInterval(scrollInterval);
+            callback();
         }
     }, 500);
 }
@@ -44,13 +43,13 @@ const getUserInfo: (userElement: HTMLElement) => [string, number | null] = funct
 }
 
 
-const addScrollButton = () => {
-    const button = document.createElement("Button");
-    button.innerHTML = "Scroll To Bottom of Friends List";
-    button.setAttribute("style", "bottom:0;right:0;position:absolute;z-index: 9999");
-    button.onclick = scrollToBottom;
-    document.body.appendChild(button);
-}
+// const addScrollButton = () => {
+//     const button = document.createElement("Button");
+//     button.innerHTML = "Scroll To Bottom of Friends List";
+//     button.setAttribute("style", "bottom:0;right:0;position:absolute;z-index: 9999");
+//     button.onclick = scrollToBottom;
+//     document.body.appendChild(button);
+// }
 
 
 const addDropDown = () => {
@@ -74,7 +73,8 @@ const addDropDown = () => {
 }
 
 const populateUserInfo = async () => {
-    const userRowsXPath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[2]/div/div[position()>3]";
+    const userRowsXPath = "/html/body/div[1]/div/div[1]/div/div[3]/div/div/div/div[1]/div[1]/div[1]/div/div[3]/div[1]/div[2]/div/div[position()>3]";
+
 
     const userRows = document.evaluate(userRowsXPath, document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
     let userRow = null;
@@ -83,29 +83,24 @@ const populateUserInfo = async () => {
         userInfo[username] = {"numMutualFriends": mutualFriends}
     }
 
-    const usernames: string[] = ["josh.bedwell.14"];
-    // for (let username in userInfo) {
-    //     usernames.push(username);
-    // }
+    console.log(Object.keys(userInfo).length);
 
-    // FIXME error
+    console.log("finished getting userRows");
 
-    console.log("Beginning call for user info...");
-    const response = fetch('https://stapl.cs.byu.edu/fb_user_info/', {method: 'POST', body: JSON.stringify({"users": usernames})});
-    try {
-        const data = (await response).json();
-        console.log("no error");
-    } catch (e) {
-        console.error(e);
+    for (let username of Object.keys(userInfo)) {
+        console.log("Beginning call for user info..." + username);
+        const response = await fetch('https://stapl.cs.byu.edu/fb_user_info/', {method: 'POST', body: JSON.stringify({"users": [username]})});
+        try {
+            const data = await response.json();
+            console.log("no error");
+            console.log(data);
+            return data;
+        } catch (e) {
+            console.error(e);
+        }
     }
-    // if (response.ok) {
-    //     // TODO put info from `data` into `userInfo`
-    //     console.log(data)
-    // } else {
-    //     // TODO handle error
-    //     console.log("request failed!")
-    // }
 }
+
 
 const scrollToTop = () => {
     // TODO
@@ -113,9 +108,11 @@ const scrollToTop = () => {
 
 const initialize = () => {
     addDropDown();
-    scrollToBottom();
-    populateUserInfo().then(_ => true);
-    scrollToTop();
-}
+    scrollToBottom(() => {
+        console.log("starting call to populateUserInfo");
+        populateUserInfo().then(_ => true);
+        scrollToTop();
+    });
+};
 
 initialize();
